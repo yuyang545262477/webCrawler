@@ -1,0 +1,22 @@
+{
+  "name": "webcrawler_one",
+  "version": "1.0.0",
+  "description": "demo one about of web crawler for SPA website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "javascript",
+    "website",
+    "webcrawler"
+  ],
+  "author": "David_Yu",
+  "license": "MIT",
+  "devDependencies": {
+    "async": "^2.0.0-rc.2",
+    "cheerio": "^0.20.0",
+    "superagent": "^1.8.3"
+  }
+}
