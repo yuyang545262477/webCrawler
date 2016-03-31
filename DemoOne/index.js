@@ -78,7 +78,7 @@ superagent
             GetHtml(heroId, callback);
         }, function (err, result) {
             if (err) throw  err;
-            console.log('Demo1的抓包演习结束'+'\n 此次抓包数量为'+result.length);
+            console.log('Demo1的抓包演习结束' + '\n 此次抓包数量为' + result.length);
         })
 
 
@@ -96,7 +96,7 @@ function GetHtml(heroId, callback) {
         .end(function (err, res) {
             if (err) throw err;
             var deepRespone = res.text;//获取英雄详情页面的HTML;步骤二,完成.
-            var $ = cheerio.load(deepRespone,{
+            var $ = cheerio.load(deepRespone, {
                 ignoreWhitespace: true,
                 xmlMode: false,
                 lowerCaseTags: false
@@ -107,13 +107,12 @@ function GetHtml(heroId, callback) {
             var states = $('div.tag-of-2').eq(0).children().last().text();
             //    获取英雄稀有度
             var stars = $('div.tag-of-2').eq(1).children().last().text();
-        //      获取COST
+            //      获取COST
             var cost = $('div.tag-of-2').eq(2).children().last().text();
-        //   获取配音
+            //   获取配音
             var dub = $('div.tag-of-2').eq(-1).children().last().text();
             // console.log('英雄名称'+ name + '\n' + '型态' + states +'\n' +'稀有度'+ cost + '\n'+'配音'+dub);
-            console.log( name+'\n' +'\t'+ '型态' + states  +'稀有度'+ cost +'配音'+dub);
-            callback(null,heroId);
-
+            console.log(name + '\n' + '\t' + '型态' + states + '稀有度' + cost + '配音' + dub);
+            callback(null, heroId);
         });
 }
