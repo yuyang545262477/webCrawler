@@ -8,7 +8,6 @@
 
 //依赖.
 var superagent = require('superagent');
-var cheerio = require('cheerio');
 var async = require('async');
 var request = require('request');
 
@@ -68,9 +67,10 @@ superagent
             //获取到了英雄的ID,通过详情页面的请求,获取图片.==>此处通过特定函数处理.
             log('开始请求......\n');
             getPng(heroId,callback);
+            log(heroId + '请求完毕');
         },function (err, data) {
             if (err) throw err;
-            log(data);
+            log('抓包程序结束,一共抓去了:' + data.length + "个文件");
         });
 
 
@@ -86,7 +86,7 @@ function getPng(heroId,callback) {
     request(childeUrl)
         .pipe(fs.createWriteStream(filePath))
         .on('close', function () {
-            callback(null,heroId+'请求完成');
+            callback(null, heroId);
         })
 
 
