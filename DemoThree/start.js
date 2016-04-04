@@ -31,8 +31,8 @@ var ep = new eventproxy(),
 
 //通过分析页面逻辑,得到每个页面的URL
 
-for (var i = 0; i < 3; i++) {
-    pageUrls.push('http://www.cnblogs.com/#p' + i);
+for (var i = 0; i < pageNum; i++) {
+    pageUrls.push('http://www.cnblogs.com/?CategoryId=808&CategoryType=%22SiteHome%22&ItemListActionName=%22PostList%22&PageIndex=' + i + '&ParentCategoryId=0');
 }
 
 // console.log(pageUrls);
@@ -58,9 +58,9 @@ function start() {
                     log(curPageUrls.length);
                     for (var j = 0, jLen = curPageUrls.length; j < jLen; j++) {
                         var eachPageUrls = curPageUrls.eq(j).attr('href');
-                        log(eachPageUrls);
+                        // log(i+'\n');
+                        // log(eachPageUrls);
                         urlsArray.push(eachPageUrls);
-
                         //    监听这个事件.
                         ep.emit('BlogArticleHtml', eachPageUrls);
                     }
@@ -69,21 +69,27 @@ function start() {
 
         ep.after('BlogArticleHtml', pageUrls.length * 20, function (eachPageUrls) {
             //    传回监听之后.触发下列函数执行....
-            log('触发后,开始creating');
-            // res.writeHead(200, { 'Content-Type': 'text/plain' });
             res.write('<br/>');
             res.write('eachPageUrls.length is ' + eachPageUrls.length + '<br/>');
             for (var x = 0; x < eachPageUrls.length; x++) {
                 res.write('eachPageUrl is ' + eachPageUrls[x] + '<br/>');
             }
             res.end('<br/>');
-            log('已经生成');
         });
     }
 
-    console.log("开始生成网页");
     http.createServer(onRequest).listen(3000, '127.0.0.1');
-    console.log("网页已经生成");
+
+//     去重函数
+    function removeDuplicate(before) {
+        var ar = [];
+        for (var i = 0, l = before.length; i < l; i++) {
+            if (ar.indexOf(before[i] == -1)) {
+                ar.push(before[i]);
+            }
+        }
+        return ar;
+    }
 }
 exports.start = start;
 
