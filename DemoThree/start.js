@@ -68,13 +68,40 @@ function start() {
         });
 
         ep.after('BlogArticleHtml', pageUrls.length * 20, function (eachPageUrls) {
-            //    传回监听之后.触发下列函数执行....
-            res.write('<br/>');
-            res.write('eachPageUrls.length is ' + eachPageUrls.length + '<br/>');
-            for (var x = 0; x < eachPageUrls.length; x++) {
-                res.write('eachPageUrl is ' + eachPageUrls[x] + '<br/>');
-            }
-            res.end('<br/>');
+            // 当所有BlogArticle 事件完成之后.,执行下列函数
+
+
+            //    控制并发数
+            var curCount = 0;
+            var reptileMove = function (url, callback) {
+                //    延迟浩渺数量
+                var delay = parseInt((Math.random() * 30000000) % 1000, 10);
+                curCount++;
+                log("爬虫并发数", curCount, '正在抓取的是', url, ',耗时', delay, '豪秒');
+
+                superagent.get(url)
+                    .end(function (err, sres) {
+                        var $ = cheerio.load(sres.text);
+                        //    收集数据,拼接URL
+                        var currentBlogApp = url.split('/p')[0].split('/')[3],
+                            appurl = 'http://www.cnblogs.com/mvc/blog/news.aspx?blogApp=' + currentBlogApp;
+                        // 具体收集函数
+                        personInfo(appurl);
+                    });
+
+                setTimeout(function () {
+                    curCount--;
+                    callback(null, url + 'call back content');
+                }, delay);
+            };
+            //    异步回调
+            async.mapLimit(eachPageUrls, 5, function (url, callback) {
+                reptileMove(url, callback);
+            }, function (err, result) {
+                if (err) throw err;
+                log(result);
+            })
+
         });
     }
 
